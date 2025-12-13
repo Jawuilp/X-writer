@@ -1,0 +1,10 @@
+{
+    "command.setupCredentials": "X Writer: Setup Credentials",
+    "command.resetCredentials": "X Writer: Reset Credentials",
+    "command.importCredentials": "X Writer: Import Credentials (.env/txt)",
+    "command.postTweet": "X Writer: Post Tweet",
+    "command.donate": "X Writer: Donate / Support",
+    "command.help": "X Writer: Help & About",
+    "view.xWriterView": "Quick Actions",
+    "config.language": "Language for the extension / Idioma de la extensión (en/es)"
+}

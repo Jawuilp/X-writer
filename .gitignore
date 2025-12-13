@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Production
+out/
+dist/
+build/
+
+# VS Code Extension
+.vscode-test/
+*.vsix
+.vscode/
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/tasks.json
+
+# Environment Variables (CRITICAL: Do not publish keys)
+.env
+.env.local
+.env.*
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Testing
+coverage/
+
+# Misc
+.npmrc
+
+# Internal Documentation (Ignored)
+roadmap.md
+TESTING.md
+ACTIVITY-BAR-GUIDE.md

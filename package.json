@@ -1,0 +1,93 @@
+{
+  "name": "x-writer",
+  "displayName": "X Writer",
+  "description": "Extensión para publicar en Twitter/X desde VS Code (BYOK)",
+  "version": "0.0.1",
+  "publisher": "jawuilp",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jawuilp/x-writer"
+  },
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "xWriter",
+          "title": "X Writer",
+          "icon": "resources/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "xWriter": [
+        {
+          "id": "xWriterView",
+          "name": "%view.xWriterView%"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "xWriter.setupCredentials",
+        "title": "%command.setupCredentials%"
+      },
+      {
+        "command": "xWriter.resetCredentials",
+        "title": "%command.resetCredentials%"
+      },
+      {
+        "command": "xWriter.importCredentials",
+        "title": "%command.importCredentials%"
+      },
+      {
+        "command": "xWriter.postTweet",
+        "title": "%command.postTweet%"
+      },
+      {
+        "command": "xWriter.donate",
+        "title": "%command.donate%"
+      },
+      {
+        "command": "xWriter.help",
+        "title": "%command.help%"
+      }
+    ],
+    "configuration": {
+      "title": "X Writer",
+      "properties": {
+        "xWriter.language": {
+          "type": "string",
+          "default": "en",
+          "enum": [
+            "en",
+            "es"
+          ],
+          "description": "%config.language%"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "pretest": "pnpm run lint",
+    "test": "node ./test/runTest.js",
+    "package": "pnpm exec vsce package --no-dependencies --allow-missing-repository",
+    "install-local": "code --install-extension x-writer-0.0.1.vsix"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.75.0",
+    "@vscode/vsce": "^3.7.1",
+    "eslint": "^8.36.0"
+  },
+  "dependencies": {
+    "twitter-api-v2": "^1.15.0"
+  }
+}
