@@ -1,89 +1,96 @@
 # X Writer
 
-Extensión de VS Code para publicar tweets en Twitter/X directamente desde tu editor.
+VS Code extension to post tweets to Twitter/X directly from your editor.
 
-## Características
+## Features
 
-- 🔐 **BYOK (Bring Your Own Keys)**: Tus credenciales, tu control total
-- ✍️ **Publicación Rápida**: Publica tweets sin salir de VS Code
-- 🎯 **Contexto Inteligente**: Selecciona código → Click derecho → Tweet automático
-- 🛡️ **Protección de Límites**: Contador automático (17 tweets/día)
-- 📊 **Contador en Tiempo Real**: Visualiza caracteres mientras escribes
-- 🔗 **Links Directos**: Abre tus tweets publicados con un click
-- 💙 **Activity Bar**: Ícono personalizado en la barra lateral
-- 🚀 **Interfaz Moderna**: Vista personalizada con acciones rápidas
+- 🔐 **BYOK (Bring Your Own Keys)**: Your credentials, your total control.
+- ✍️ **Fast Posting**: Post tweets without leaving VS Code.
+- 🎯 **Smart Context**: Select code → Right Click → Automatic Tweet.
+- 🛡️ **Limit Protection**: Automatic counter (17 tweets/day).
+- 📊 **Real-time Counter**: Visualize characters while you type.
+- 🔗 **Direct Links**: Open your published tweets with one click.
+- 💙 **Activity Bar**: Custom icon in the sidebar.
+- 🚀 **Modern Interface**: Custom view with quick actions.
+- 🌍 **Internationalization**: Support for English and Spanish.
 
-## Instalación
+## Installation
 
-1. Clona este repositorio
-2. Ejecuta `npm install` para instalar dependencias
-3. Presiona F5 para abrir una ventana de desarrollo de VS Code
+1. Clone this repository.
+2. Run `npm install` to install dependencies.
+3. Press F5 to open a VS Code development window.
+4. Or install the `.vsix` file manually.
 
-## Configuración
+## Configuration
 
-### Obtener credenciales de Twitter
+### Get Twitter Credentials
 
-1. Ve a [Twitter Developer Portal](https://developer.twitter.com/en/portal/dashboard)
-2. Crea una app (o usa una existente)
-3. Genera tus API Keys y Access Tokens
-4. Necesitarás:
+1. Go to [Twitter Developer Portal](https://developer.twitter.com/en/portal/dashboard).
+2. Create an app (or use an existing one).
+3. Generate your API Keys and Access Tokens.
+4. You will need:
    - API Key
    - API Secret
    - Access Token
    - Access Secret
 
-### Configurar en VS Code
+### Setup in VS Code
 
-1. Abre la paleta de comandos (`Ctrl+Shift+P` o `Cmd+Shift+P`)
-2. Busca: `X Writer: Configurar Credenciales`
-3. Elige una opción:
-   - **Importar desde archivo** (Recomendado): Selecciona un archivo `.env` o `.txt` con tus claves (`API_KEY=...`).
-   - **Ingresar manualmente**: Copia y pega tus 4 claves una por una.
+1. Open the Command Palette (`Ctrl+Shift+P` or `Cmd+Shift+P`).
+2. Search for: `X Writer: Setup Credentials`.
+3. Choose an option:
+   - **Import from file** (Recommended): Select a `.env` or `.txt` file with your keys (`API_KEY=...`).
+   - **Enter manually**: Copy and paste your 4 keys one by one.
 
-> **Nota:** Asegúrate de regenerar tus *Access Tokens* después de cambiar los permisos de la App a "Read and Write" en el portal de desarrolladores.
+> **Note:** Make sure to regenerate your *Access Tokens* after changing the App Permissions to "Read and Write" in the developer portal.
 
-### Donaciones
-Si te gusta la extensión, puedes apoyarme invitándome un café ☕:
-`X Writer: Apoyar el desarrollo` o visita [mi Ko-fi](https://ko-fi.com/jawuilp).
+### Donations
+If you like the extension, you can support me by buying me a coffee ☕:
+`X Writer: Donate / Support` or visit [my Ko-fi](https://ko-fi.com/jawuilp).
 
-## Uso
+## Usage
 
-### Publicar un tweet
+### Post a Tweet
 
-**Método 1: Desde la Activity Bar**
-1. Haz clic en el ícono de X Writer en la barra lateral izquierda 🐦
-2. Click en "✍️ Publicar Tweet"
-3. Escribe tu mensaje (contador en tiempo real: X/280)
-4. ¡Listo! Verás un botón "Ver Tweet" para abrir en el navegador
+**Method 1: From Activity Bar**
+1. Click on the X Writer icon in the left sidebar 🐦.
+2. Click on "✍️ Post Tweet".
+3. Write your message (real-time counter: X/280).
+4. Done! You will see a "View on X" button to open it in the browser.
 
-**Método 2: Con Contexto Inteligente**
-1. Selecciona código o texto en el editor
-2. `Ctrl+Shift+P` → `X Writer: Publicar Tweet`
-3. El texto seleccionado se pre-llenará automáticamente
-4. Edita y publica
+**Method 2: With Smart Context**
+1. Select code or text in the editor.
+2. `Ctrl+Shift+P` → `X Writer: Post Tweet`.
+3. The selected text will pre-fill automatically.
+4. Edit and publish.
 
-**Método 3: Desde comandos**
-1. Abre la paleta de comandos (`Ctrl+Shift+P`)
-2. Busca: `X Writer: Publicar Tweet`
-3. Escribe tu mensaje
-4. ¡Listo!
+**Method 3: From Commands**
+1. Open the Command Palette (`Ctrl+Shift+P`).
+2. Search for: `X Writer: Post Tweet`.
+3. Write your message.
+4. Done!
 
-### Límite de Tweets
+### Tweet Limit
 
-⚠️ Respetando los límites de la API gratuita de X:
-- **17 tweets por día** (contador automático)
-- El límite se reinicia cada 24 horas
-- Verás tweets restantes en cada publicación
+⚠️ Respecting the X Free API limits:
+- **17 tweets per day** (automatic counter).
+- The limit resets every 24 hours.
+- You will see remaining tweets on every post.
 
-### Eliminar credenciales
+### Delete Credentials
 
-1. Abre la paleta de comandos
-2. Busca: `X Writer: Eliminar Credenciales`
+1. Open the Command Palette.
+2. Search for: `X Writer: Reset Credentials`.
 
-## Seguridad
+## Security
 
-Las credenciales se almacenan de forma segura usando la API `SecretStorage` de VS Code, que utiliza el sistema de credenciales del sistema operativo (Keychain en macOS, Credential Manager en Windows, Secret Service en Linux).
+Credentials are stored securely using VS Code's `SecretStorage` API, which utilizes the operating system's credential system (Keychain on macOS, Credential Manager on Windows, Secret Service on Linux).
 
-## Licencia
+## Help & About
+
+- Click on the "❓ Help & About" icon in the sidebar to see commands and developer info.
+- **Change Language**: Settings > X Writer > Language.
+
+## License
 
 MIT
