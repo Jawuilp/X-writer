@@ -1,21 +1,35 @@
 {
   "name": "x-writer",
   "displayName": "X Writer",
-  "description": "Extensión para publicar en Twitter/X desde VS Code (BYOK)",
+  "description": "Post tweets to Twitter/X directly from VS Code (BYOK)",
   "version": "0.0.1",
   "publisher": "jawuilp",
+  "icon": "resources/x-writer.icon.png",
   "repository": {
     "type": "git",
     "url": "https://github.com/jawuilp/x-writer"
   },
+  "bugs": {
+    "url": "https://github.com/jawuilp/x-writer/issues"
+  },
+  "homepage": "https://github.com/jawuilp/x-writer#readme",
+  "keywords": [
+    "twitter",
+    "x",
+    "social",
+    "tweet",
+    "post"
+  ],
   "engines": {
     "vscode": "^1.75.0"
   },
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
-  "main": "./extension.js",
+  "activationEvents": [
+    "onView:xWriterView"
+  ],
+  "main": "./dist/extension.js",
   "contributes": {
     "viewsContainers": {
       "activitybar": [
@@ -76,6 +90,9 @@
     }
   },
   "scripts": {
+    "vscode:prepublish": "node build.js --production",
+    "compile": "node build.js",
+    "watch": "node build.js --watch",
     "lint": "eslint .",
     "pretest": "pnpm run lint",
     "test": "node ./test/runTest.js",
@@ -85,6 +102,7 @@
   "devDependencies": {
     "@types/vscode": "^1.75.0",
     "@vscode/vsce": "^3.7.1",
+    "esbuild": "^0.27.1",
     "eslint": "^8.36.0"
   },
   "dependencies": {

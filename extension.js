@@ -1,6 +1,5 @@
 const vscode = require('vscode');
 const { setupCredentials, getCredentials, resetCredentials, importCredentials } = require('./credentialsManager');
-const { TwitterApi } = require('twitter-api-v2');
 const { XWriterViewProvider } = require('./viewProvider');
 const { canPostTweet, incrementTweetCount, formatTimeUntilReset } = require('./rateLimiter');
 const { t } = require('./i18n');
@@ -100,6 +99,9 @@ function activate(context) {
       if (!tweetText) {
         return; // Usuario canceló
       }
+
+      // Importar TwitterApi solo cuando se necesite (Lazy Load)
+      const { TwitterApi } = require('twitter-api-v2');
 
       // Crear cliente de Twitter
       const client = new TwitterApi({

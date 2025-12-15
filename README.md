@@ -14,12 +14,19 @@ VS Code extension to post tweets to Twitter/X directly from your editor.
 - 🚀 **Modern Interface**: Custom view with quick actions.
 - 🌍 **Internationalization**: Support for English and Spanish.
 
-## Installation
+## Installation & Development
 
 1. Clone this repository.
-2. Run `npm install` to install dependencies.
+2. Run `pnpm install` to install dependencies.
 3. Press F5 to open a VS Code development window.
-4. Or install the `.vsix` file manually.
+
+### Building the Extension
+
+This project uses `esbuild` for bundling.
+
+- **Development Watch Mode**: `npm run watch`
+- **Build for Production**: `npm run compile`
+- **Package Extension (.vsix)**: `pnpm run package`
 
 ## Configuration
 

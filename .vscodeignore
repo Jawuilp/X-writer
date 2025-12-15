@@ -11,3 +11,6 @@ vsc-extension-quickstart.md
 roadmap.md
 TESTING.md
 ACTIVITY-BAR-GUIDE.md
+node_modules/**
+src/**
+build.js
