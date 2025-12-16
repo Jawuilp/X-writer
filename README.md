@@ -52,8 +52,10 @@ This project uses `esbuild` for bundling.
 > **Note:** Make sure to regenerate your *Access Tokens* after changing the App Permissions to "Read and Write" in the developer portal.
 
 ### Donations
+
 If you like the extension, you can support me by buying me a coffee ☕:
-`X Writer: Donate / Support` or visit [my Ko-fi](https://ko-fi.com/jawuilp).
+
+[![ko-fi](https://storage.ko-fi.com/cdn/kofi2.png?v=3)](https://ko-fi.com/jawuilp)
 
 ## Usage
 

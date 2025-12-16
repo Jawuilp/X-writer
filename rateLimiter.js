@@ -58,8 +58,14 @@ function getResetTime(context) {
  * @param {vscode.ExtensionContext} context
  */
 async function resetIfNeeded(context) {
-    const lastReset = context.globalState.get('lastResetTimestamp', Date.now());
+    let lastReset = context.globalState.get('lastResetTimestamp');
     const now = Date.now();
+
+    // If never set, initialize it
+    if (!lastReset) {
+        await context.globalState.update('lastResetTimestamp', now);
+        return;
+    }
 
     if (now - lastReset >= RESET_INTERVAL) {
         await context.globalState.update('tweetCount', 0);

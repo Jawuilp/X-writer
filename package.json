@@ -2,7 +2,7 @@
   "name": "x-writer",
   "displayName": "X Writer",
   "description": "Post tweets to Twitter/X directly from VS Code (BYOK)",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "publisher": "jawuilp",
   "icon": "resources/x-writer.icon.png",
   "repository": {
