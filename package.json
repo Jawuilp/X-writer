@@ -2,7 +2,7 @@
   "name": "x-writer",
   "displayName": "X Writer",
   "description": "Post tweets to Twitter/X directly from VS Code (BYOK)",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "publisher": "jawuilp",
   "icon": "resources/x-writer.icon.png",
   "repository": {
@@ -66,6 +66,10 @@
         "title": "%command.postTweet%"
       },
       {
+        "command": "xWriter.postCodeImage",
+        "title": "%command.postCodeImage%"
+      },
+      {
         "command": "xWriter.donate",
         "title": "%command.donate%"
       },
@@ -85,6 +89,21 @@
             "es"
           ],
           "description": "%config.language%"
+        },
+        "xWriter.signature.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Append a promotional signature to tweets"
+        },
+        "xWriter.signature.text": {
+          "type": "string",
+          "default": "🚀 via X Writer",
+          "description": "Custom signature text appended to tweets"
+        },
+        "xWriter.autoThread.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically split long text into threaded tweets (1/X, 2/X...)"
         }
       }
     }
@@ -95,9 +114,9 @@
     "watch": "node build.js --watch",
     "lint": "eslint .",
     "pretest": "pnpm run lint",
-    "test": "node ./test/runTest.js",
+    "test": "pnpm run compile",
     "package": "pnpm exec vsce package --no-dependencies --allow-missing-repository",
-    "install-local": "code --install-extension x-writer-0.0.1.vsix"
+    "install-local": "code --install-extension x-writer-0.0.2.vsix"
   },
   "devDependencies": {
     "@types/vscode": "^1.75.0",

@@ -26,6 +26,12 @@ class XWriterViewProvider {
                     vscode.TreeItemCollapsibleState.None
                 ),
                 new ActionTreeItem(
+                    t('tree.postCodeImage'),
+                    t('tree.postCodeImageTooltip'),
+                    'xWriter.postCodeImage',
+                    vscode.TreeItemCollapsibleState.None
+                ),
+                new ActionTreeItem(
                     t('tree.setup'),
                     t('tree.setupTooltip'),
                     'xWriter.setupCredentials',

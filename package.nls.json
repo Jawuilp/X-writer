@@ -3,6 +3,7 @@
     "command.resetCredentials": "X Writer: Reset Credentials",
     "command.importCredentials": "X Writer: Import Credentials (.env/txt)",
     "command.postTweet": "X Writer: Post Tweet",
+    "command.postCodeImage": "X Writer: Post Code as Image",
     "command.donate": "X Writer: Donate / Support",
     "command.help": "X Writer: Help & About",
     "view.xWriterView": "Quick Actions",

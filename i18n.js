@@ -31,6 +31,13 @@ const messages = {
         tweetTooLong: "⚠️ {0}/280 characters - Too long",
         postingTitle: "Posting to X...",
         tweetSuccess: "✅ Tweet posted successfully!",
+        threadPostingTitle: "Posting thread {0}/{1}...",
+        threadSuccess: "✅ Thread posted successfully! ({0} tweets)",
+        threadViewOnX: "View Thread on X",
+        codeImageNoSelection: "No code selected. Please select code first.",
+        codeImageGenerating: "Generating image from code...",
+        codeImagePosting: "Posting code image...",
+        codeImageSuccess: "✅ Code image posted!",
         viewOnX: "View on X",
         error429: "⛔ Error 429: You have exceeded the Twitter API limit for today.",
         errorAuth: "⛔ Auth/Permission Error. Check your credentials.",
@@ -50,18 +57,31 @@ const messages = {
         "tree.setupTooltip": "Configure your Twitter credentials",
         "tree.reset": "🗑️ Delete Credentials",
         "tree.resetTooltip": "Delete your saved credentials",
+        "tree.postCodeImage": "🖼️ Post Code Image",
+        "tree.postCodeImageTooltip": "Share selected code as an image",
         "tree.donate": "💙 Donate / Support",
         "tree.donateTooltip": "Support X Writer development",
         "tree.help": "❓ Help & About",
         "tree.helpTooltip": "Commands info and About developer",
 
         // Help Command
-        "helpMessage": "X Writer v0.0.1\n\nCommands:\n- Post Tweet: Publish to X\n- Setup/Import: Configure keys\n- Reset: Delete keys\n\nChange Language: Settings > X Writer > Language\n\nCreated by Jawuil Pineda",
+        "helpMessage": "X Writer v0.0.2\n\nCommands:\n- Post Tweet: Publish to X\n- Post Code Image: Share code as image\n- Setup/Import: Configure keys\n- Reset: Delete keys\n\nChange Language: Settings > X Writer > Language\n\nCreated by Jawuil Pineda",
         "changeLanguage": "Change Language",
         "selectLanguage": "Select Language",
         "languageChanged": "Language changed to {0}",
         "visitWebsite": "🌐 Visit jawuil.dev",
-        "viewReadme": "📖 View Documentation"
+        "viewReadme": "📖 View Documentation",
+
+        // Preview Panel
+        "previewTitle": "Preview — Code Image",
+        "previewHeader": "📸 Code Image Preview",
+        "previewMessageLabel": "Your message (optional)",
+        "previewTextPlaceholder": "What's happening? Add context for this code...",
+        "previewPublish": "🚀 Publish",
+        "previewCancel": "Cancel",
+        "previewPublishing": "Publishing...",
+        "previewSignatureOn": "Signature",
+        "previewSignatureOff": "Signature disabled"
     },
     es: {
         setupCredentialsTitle: "Configurar Credenciales",
@@ -93,6 +113,13 @@ const messages = {
         tweetTooLong: "⚠️ {0}/280 caracteres - Demasiado largo",
         postingTitle: "Publicando en X...",
         tweetSuccess: "✅ Tweet publicado con éxito!",
+        threadPostingTitle: "Publicando hilo {0}/{1}...",
+        threadSuccess: "✅ Hilo publicado con éxito! ({0} tweets)",
+        threadViewOnX: "Ver Hilo en X",
+        codeImageNoSelection: "No hay código seleccionado. Por favor selecciona código primero.",
+        codeImageGenerating: "Generando imagen desde el código...",
+        codeImagePosting: "Publicando imagen de código...",
+        codeImageSuccess: "✅ Imagen de código publicada!",
         viewOnX: "Ver en X",
         error429: "⛔ Error 429: Has excedido el límite de la API de Twitter por hoy.",
         errorAuth: "⛔ Error de permisos/autenticación. Verifica tus credenciales.",
@@ -112,18 +139,31 @@ const messages = {
         "tree.setupTooltip": "Configura tus credenciales de Twitter",
         "tree.reset": "🗑️ Eliminar Credenciales",
         "tree.resetTooltip": "Elimina tus credenciales guardadas",
+        "tree.postCodeImage": "🖼️ Publicar Código como Imagen",
+        "tree.postCodeImageTooltip": "Comparte código seleccionado como imagen",
         "tree.donate": "💙 Donar / Apoyar",
         "tree.donateTooltip": "Apoya el desarrollo de X Writer",
         "tree.help": "❓ Ayuda / Acerca de",
         "tree.helpTooltip": "Información de comandos y desarrollador",
 
         // Help Command
-        "helpMessage": "X Writer v0.0.1\n\nComandos:\n- Publicar: Postea en X\n- Configurar/Importar: Gestiona claves\n- Eliminar: Borra credenciales\n\nCambiar Idioma: Configuración > X Writer > Language\n\nCreado por Jawuil Pineda",
+        "helpMessage": "X Writer v0.0.2\n\nComandos:\n- Publicar: Postea en X\n- Publicar Código Imagen: Comparte código como imagen\n- Configurar/Importar: Gestiona claves\n- Eliminar: Borra credenciales\n\nCambiar Idioma: Configuración > X Writer > Language\n\nCreado por Jawuil Pineda",
         "changeLanguage": "Cambiar Idioma",
         "selectLanguage": "Seleccionar Idioma",
         "languageChanged": "Idioma cambiado a {0}",
         "visitWebsite": "🌐 Visitar jawuil.dev",
-        "viewReadme": "📖 Ver Documentación"
+        "viewReadme": "📖 Ver Documentación",
+
+        // Preview Panel
+        "previewTitle": "Vista Previa — Imagen de Código",
+        "previewHeader": "📸 Vista Previa del Código",
+        "previewMessageLabel": "Tu mensaje (opcional)",
+        "previewTextPlaceholder": "¿Qué está pasando? Agrega contexto para este código...",
+        "previewPublish": "🚀 Publicar",
+        "previewCancel": "Cancelar",
+        "previewPublishing": "Publicando...",
+        "previewSignatureOn": "Firma",
+        "previewSignatureOff": "Firma desactivada"
     }
 };
 

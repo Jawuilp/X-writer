@@ -7,6 +7,9 @@ VS Code extension to post tweets to Twitter/X directly from your editor.
 - 🔐 **BYOK (Bring Your Own Keys)**: Your credentials, your total control.
 - ✍️ **Fast Posting**: Post tweets without leaving VS Code.
 - 🎯 **Smart Context**: Select code → Right Click → Automatic Tweet.
+- 🧵 **Smart Threads**: Long text auto-splits into threaded tweets (1/X, 2/X...).
+- 🖼️ **Code to Image**: Share your selected code as a beautiful syntax-highlighted image.
+- ✒️ **Optional Signature**: Append a custom promo footer (toggle on/off in Settings).
 - 🛡️ **Limit Protection**: Automatic counter (17 tweets/day).
 - 📊 **Real-time Counter**: Visualize characters while you type.
 - 🔗 **Direct Links**: Open your published tweets with one click.
@@ -24,8 +27,8 @@ VS Code extension to post tweets to Twitter/X directly from your editor.
 
 This project uses `esbuild` for bundling.
 
-- **Development Watch Mode**: `npm run watch`
-- **Build for Production**: `npm run compile`
+- **Development Watch Mode**: `pnpm run watch`
+- **Build for Production**: `pnpm run compile`
 - **Package Extension (.vsix)**: `pnpm run package`
 
 ## Configuration
@@ -78,6 +81,31 @@ If you like the extension, you can support me by buying me a coffee ☕:
 2. Search for: `X Writer: Post Tweet`.
 3. Write your message.
 4. Done!
+
+### Smart Threads
+
+When **Auto Thread** is enabled (default), writing more than 280 characters automatically splits your text into a thread numbered `1/X`, `2/X`... without cutting words. The extension also checks that you have enough daily tweets left before posting the thread.
+
+Configure it in **Settings > X Writer > Auto Thread**.
+
+### Code to Image
+
+Share your code as a screenshot with **live preview before publishing**:
+
+1. Select any code in the editor.
+2. Click **"🖼️ Post Code Image"** in the sidebar (or `Ctrl+Shift+P` → `X Writer: Post Code Image`).
+3. 🆕 **Preview Panel**: See exactly how your code image looks before publishing.
+   - Add an optional message with a real-time character counter.
+   - See a preview of your signature.
+   - Press **Ctrl+Enter** to publish or **Escape** to cancel.
+4. Hit **Publish** — your code is posted as a beautifully syntax-highlighted PNG on X.
+
+### Signature
+
+Add a personal or promotional footer to every tweet:
+- Default: `🚀 via X Writer`
+- Fully customizable text in **Settings > X Writer > Signature**.
+- Toggle on/off anytime.
 
 ### Tweet Limit
 

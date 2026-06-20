@@ -65,8 +65,6 @@ async function setupCredentials(context) {
  * Lógica manual para pedir credenciales
  */
 async function setupCredentialsManual(context) {
-  const { secrets } = context;
-
   const apiKey = await vscode.window.showInputBox({
     prompt: t('apiKeyPrompt'),
     password: true,

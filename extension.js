@@ -3,6 +3,10 @@ const { setupCredentials, getCredentials, resetCredentials, importCredentials } 
 const { XWriterViewProvider } = require('./viewProvider');
 const { canPostTweet, incrementTweetCount, formatTimeUntilReset } = require('./rateLimiter');
 const { t } = require('./i18n');
+const { applySignature, previewSignature } = require('./signature');
+const { needsThread, splitIntoThread } = require('./threader');
+const { generateCodeImage } = require('./codeToImage');
+const { showPreviewPanel } = require('./previewPanel');
 
 /**
  * Activa la extensión
@@ -60,27 +64,13 @@ function activate(context) {
       let initialValue = '';
       if (editor && !editor.selection.isEmpty) {
         const selectedText = editor.document.getText(editor.selection);
-        // Limitar a 280 caracteres si es muy largo
-        initialValue = selectedText.length > 280
-          ? selectedText.substring(0, 280)
-          : selectedText;
+        initialValue = selectedText;
       }
 
-      // Pedir el texto del tweet con contador de caracteres
+      const autoThreadEnabled = vscode.workspace.getConfiguration('xWriter.autoThread').get('enabled', true);
+
+      // Pedir el texto del tweet
       const tweetText = await vscode.window.showInputBox({
-        prompt: `Write your tweet (${rateLimit.remaining} remaining today)`, // Mixed... let's assume we keep this partially dynamic or add to i18n
-        // Actually, prompt isn't in my i18n map. I should add a generic prompt or leave it. 
-        // "Escribe tu tweet ..."
-        // I will use a simple string for now, or assume english.
-        // Let's add 'tweetInputPrompt' to the map if I can? 
-        // I can't modify i18n.js in the same step.
-        // I'll use placeholders for now or just generic English as it is "Write your tweet" which is understandable. 
-        // Wait, I should stick to the requested languages.
-        // I'll use `t('tweetPlaceholder')` for placeholder.
-        // Prompt is dynamic with count.
-        // I'll make a formatted string for prompt locally using t() if I can, or hardcode generic "New Tweet".
-        // Let's us `t('tweetPlaceholder')` for prompt title too? No.
-        // I'll use a hardcoded English string which is safe given current i18n.js limitations for this specific dynamic string.
         prompt: `Tweet (${rateLimit.remaining} remaining)`,
         placeHolder: t('tweetPlaceholder'),
         value: initialValue,
@@ -88,10 +78,12 @@ function activate(context) {
           if (!text || text.trim().length === 0) {
             return t('tweetEmpty');
           }
-          if (text.length > 280) {
-            return t('tweetTooLong', text.length);
+          if (!autoThreadEnabled) {
+            const { signedText } = previewSignature(text);
+            if (signedText.length > 280) {
+              return t('tweetTooLong', signedText.length);
+            }
           }
-          // Retornar undefined/null significa que es válido
           return undefined;
         }
       });
@@ -99,6 +91,9 @@ function activate(context) {
       if (!tweetText) {
         return; // Usuario canceló
       }
+
+      // Aplicar firma
+      const finalText = applySignature(tweetText);
 
       // Importar TwitterApi solo cuando se necesite (Lazy Load)
       const { TwitterApi } = require('twitter-api-v2');
@@ -111,29 +106,84 @@ function activate(context) {
         accessSecret: creds.accessSecret,
       });
 
-      // Publicar tweet
-      let tweetData;
-      await vscode.window.withProgress({
-        location: vscode.ProgressLocation.Notification,
-        title: t('postingTitle'),
-        cancellable: false
-      }, async () => {
-        tweetData = await client.v2.tweet(tweetText);
-      });
+      let tweetUrl;
 
-      const tweetId = tweetData.data.id;
-      const tweetUrl = `https://twitter.com/user/status/${tweetId}`;
+      if (needsThread(finalText)) {
+        // Publicar hilo
+        const tweets = splitIntoThread(finalText);
 
-      // Incrementar contador diario
-      await incrementTweetCount(context);
+        // Verificar que hay suficientes tweets disponibles en el rate limit
+        const needed = tweets.length;
+        const available = rateLimit.remaining;
+        if (needed > available) {
+          vscode.window.showWarningMessage(
+            `This thread needs ${needed} tweets but you only have ${available} remaining today.`
+          );
+          return;
+        }
 
-      const action = await vscode.window.showInformationMessage(
-        t('tweetSuccess'),
-        t('viewOnX')
-      );
+        let lastTweetId = null;
+        let firstTweetId = null;
 
-      if (action === t('viewOnX')) {
-        vscode.env.openExternal(vscode.Uri.parse(tweetUrl));
+        for (let i = 0; i < tweets.length; i++) {
+          await vscode.window.withProgress({
+            location: vscode.ProgressLocation.Notification,
+            title: t('threadPostingTitle', i + 1, tweets.length),
+            cancellable: false
+          }, async () => {
+            const options = {};
+            if (lastTweetId) {
+              options.reply = { in_reply_to_tweet_id: lastTweetId };
+            }
+            const result = await client.v2.tweet(tweets[i], options);
+            lastTweetId = result.data.id;
+            if (!firstTweetId) {
+              firstTweetId = lastTweetId;
+            }
+          });
+
+          // Incrementar contador por cada tweet del hilo
+          await incrementTweetCount(context);
+        }
+
+        const cachedUsername = context.globalState.get('cachedUsername');
+        tweetUrl = cachedUsername
+          ? `https://twitter.com/${cachedUsername}/status/${firstTweetId}`
+          : `https://twitter.com/i/web/status/${firstTweetId}`;
+
+        const action = await vscode.window.showInformationMessage(
+          t('threadSuccess', tweets.length),
+          t('threadViewOnX')
+        );
+
+        if (action === t('threadViewOnX')) {
+          vscode.env.openExternal(vscode.Uri.parse(tweetUrl));
+        }
+      } else {
+        // Publicar tweet único
+        let tweetData;
+        await vscode.window.withProgress({
+          location: vscode.ProgressLocation.Notification,
+          title: t('postingTitle'),
+          cancellable: false
+        }, async () => {
+          tweetData = await client.v2.tweet(finalText);
+        });
+
+        const tweetId = tweetData.data.id;
+        tweetUrl = `https://twitter.com/user/status/${tweetId}`;
+
+        // Incrementar contador diario
+        await incrementTweetCount(context);
+
+        const action = await vscode.window.showInformationMessage(
+          t('tweetSuccess'),
+          t('viewOnX')
+        );
+
+        if (action === t('viewOnX')) {
+          vscode.env.openExternal(vscode.Uri.parse(tweetUrl));
+        }
       }
 
       // Verificar si toca pedir donación (cada 7 tweets)
@@ -148,6 +198,100 @@ function activate(context) {
       } else {
         vscode.window.showErrorMessage(t('errorGeneric', error.message));
       }
+    }
+  });
+
+  // Comando para publicar código como imagen
+  const postCodeImageCmd = vscode.commands.registerCommand('xWriter.postCodeImage', async () => {
+    try {
+      const editor = vscode.window.activeTextEditor;
+      if (!editor || editor.selection.isEmpty) {
+        vscode.window.showWarningMessage(t('codeImageNoSelection'));
+        return;
+      }
+
+      const creds = await getCredentials(context);
+      if (!creds.apiKey || !creds.apiSecret || !creds.accessToken || !creds.accessSecret) {
+        const setup = await vscode.window.showErrorMessage(
+          t('missingCredentialsPost'),
+          t('yes'),
+          t('no')
+        );
+        if (setup === t('yes')) {
+          await vscode.commands.executeCommand('xWriter.setupCredentials');
+        }
+        return;
+      }
+
+      const rateLimit = await canPostTweet(context);
+      if (!rateLimit.canPost) {
+        const timeLeft = formatTimeUntilReset(rateLimit.resetTime);
+        vscode.window.showWarningMessage(t('rateLimitReached', timeLeft));
+        return;
+      }
+
+      const code = editor.document.getText(editor.selection);
+      const lang = editor.document.languageId;
+
+      // 1. Generar imagen
+      let pngBuffer;
+      await vscode.window.withProgress({
+        location: vscode.ProgressLocation.Notification,
+        title: t('codeImageGenerating'),
+        cancellable: false
+      }, async () => {
+        pngBuffer = await generateCodeImage(code, lang);
+      });
+
+      // 2. Mostrar preview panel
+      const previewResult = await showPreviewPanel(pngBuffer, lang);
+
+      if (previewResult.action === 'cancel') {
+        return; // Usuario canceló — no publicar
+      }
+
+      // 3. Publicar (usuario confirmó)
+      const finalText = previewResult.text
+        ? applySignature(previewResult.text)
+        : applySignature('');
+
+      const { TwitterApi } = require('twitter-api-v2');
+      const client = new TwitterApi({
+        appKey: creds.apiKey,
+        appSecret: creds.apiSecret,
+        accessToken: creds.accessToken,
+        accessSecret: creds.accessSecret,
+      });
+
+      let tweetUrl;
+      await vscode.window.withProgress({
+        location: vscode.ProgressLocation.Notification,
+        title: t('codeImagePosting'),
+        cancellable: false
+      }, async () => {
+        const mediaId = await client.v1.uploadMedia(pngBuffer, { type: 'png' });
+        const result = await client.v2.tweet(finalText || '', {
+          media: { media_ids: [mediaId] }
+        });
+        tweetUrl = `https://twitter.com/user/status/${result.data.id}`;
+      });
+
+      await incrementTweetCount(context);
+
+      const action = await vscode.window.showInformationMessage(
+        t('codeImageSuccess'),
+        t('viewOnX')
+      );
+
+      if (action === t('viewOnX')) {
+        vscode.env.openExternal(vscode.Uri.parse(tweetUrl));
+      }
+
+      await checkDonationPrompt(context);
+
+    } catch (error) {
+      console.error(error);
+      vscode.window.showErrorMessage(t('errorGeneric', error.message));
     }
   });
 
@@ -188,7 +332,6 @@ function activate(context) {
         const newVal = langChoice === 'Español' ? 'es' : 'en';
         await config.update('language', newVal, vscode.ConfigurationTarget.Global);
 
-        // Refresh view
         viewProvider.refresh();
         vscode.window.showInformationMessage(t('languageChanged', langChoice));
       }
@@ -200,7 +343,11 @@ function activate(context) {
     await importCredentials(context);
   });
 
-  context.subscriptions.push(setupCmd, resetCmd, importCmd, postTweetCmd, donateCmd, helpCmd);
+  context.subscriptions.push(
+    setupCmd, resetCmd, importCmd,
+    postTweetCmd, postCodeImageCmd,
+    donateCmd, helpCmd
+  );
 }
 
 /**
@@ -214,7 +361,6 @@ async function checkDonationPrompt(context) {
 
   // Cada 7 tweets
   if (currentTotal > 0 && currentTotal % 7 === 0) {
-    // Esperar un poco para no abrumar justo después de publicar
     setTimeout(async () => {
       await vscode.commands.executeCommand('xWriter.donate');
     }, 1500);

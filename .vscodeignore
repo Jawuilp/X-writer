@@ -14,3 +14,4 @@ ACTIVITY-BAR-GUIDE.md
 node_modules/**
 src/**
 build.js
+.limitcode/**

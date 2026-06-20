@@ -35,6 +35,7 @@ coverage/
 
 # Misc
 .npmrc
+.limitcode/
 
 # Internal Documentation (Ignored)
 roadmap.md
